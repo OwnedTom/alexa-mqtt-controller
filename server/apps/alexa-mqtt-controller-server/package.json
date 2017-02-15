@@ -1,0 +1,14 @@
+{
+  "name": "alexa-mqtt-controller-server",
+  "version": "1.0.0",
+  "description": "Control things modularly over MQTT via Alexa",
+  "main": "index.js",
+  "author": "Tom Steele",
+  "license": "ISC",
+  "dependencies": {
+    "alexa-app": "^2.3.4",
+    "lodash": "^4.16.0",
+    "mqtt": "^2.3.1",
+    "pinkie-promise": "^2.0.1"
+  }
+}

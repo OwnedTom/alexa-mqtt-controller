@@ -1,0 +1,13 @@
+{
+  "name": "alexa-mqtt-controller-server-kodi",
+  "version": "1.0.0",
+  "description": "Server code to control Kodi, in particular Exodus, from Alexa.",
+  "repository": "",
+  "main": "index.js",
+  "author": "Tom Steele",
+  "license": "ISC",
+  "dependencies": {
+    "imdb-api": "^2.0.0",
+    "trakt.tv": "^2.0.0"
+  }
+}

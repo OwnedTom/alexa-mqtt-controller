@@ -1,0 +1,46 @@
+{
+  "name": "alexa-home-controller",
+  "version": "1.0.0",
+  "description": "Active voice monitoring tool but written in node",
+  "main": "server.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "snowboy",
+    "alexa",
+    "echo",
+    "amazon echo",
+    "voice"
+  ],
+  "author": "WarlaxZ",
+  "license": "ISC",
+  "dependencies": {
+    "alexa-app": "^2.3.4",
+    "alexa-app-server": "^2.2.4"
+  },
+  "jshintConfig": {
+    "esversion": 6,
+    "ignore": [
+      {
+        "dir": "./node_modules"
+      },
+      {
+        "dir": "./apps/*/node_modules"
+      }
+    ]
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
+    "cryptr": "^2.0.0",
+    "grunt": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-npm-install-all": "^0.1.0",
+    "gulp": "^3.9.1",
+    "gulp-install": "^0.6.0",
+    "jshint": "^2.9.3",
+    "mocha": "^3.0.2"
+  }
+}
