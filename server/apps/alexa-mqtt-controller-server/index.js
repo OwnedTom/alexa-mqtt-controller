@@ -13,6 +13,7 @@ const utils = require('./utils');
 var modules = {};
 require('fs').readdirSync(modulePath).forEach(function(file) {
     modules[file] = require("./modules/" + file);
+    modules[file].init();
 });
 
 var app = new Alexa.app('alexa-mqtt-controller-server');

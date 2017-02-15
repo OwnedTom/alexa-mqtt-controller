@@ -20,7 +20,24 @@ app.dictionary = {
 app.name = "kodi";
 
 app.init = function() {
+    app.traktActivate().then(function(poll) {
+        
+    }, function(err) {
+        
+    });
+}
 
+app.traktLogin = function() {
+    
+}
+
+app.traktActivate = function() {
+    trakt.get_codes().then(function(poll) {
+        utils.debug("Activate Trakt by going to " + poll.verification_url + " and enter the code " + poll.user_code);
+        return trakt.poll_access(poll);
+    }).catch(function(error) {
+        utils.debug(error.message);
+    })
 }
 
 app.getOptionsForTitle = function(req) {
