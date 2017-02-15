@@ -9,8 +9,7 @@ const trakt = new Trakt({
     client_secret: '91b0fe3eda36eb8f2caf131fd4184b2f81025409c5badb3c41eae293ddf36266',
     plugins: []
 });
-var token = {"access_token":"fe2f091ef576e0e377c43b3ef1f4f59df36bfee5c47a10b29d98411910ae6239","expires":1494338906804,"refresh_token":"eac5a8465e8ae179bea23ab6c492b4440b66b5b5a2e1efac0a6dc6058e37a1dd"};
-trakt.import_token(token);
+
 
 var app = {};
 app.dictionary = {
@@ -253,7 +252,5 @@ app.intents = [
         }
     }
 ]
-
-
 
 module.exports = app;
