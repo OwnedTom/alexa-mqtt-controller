@@ -1,4 +1,4 @@
-const config = require('../../config');
+const config = require('./config');
 const utils = require('../../utils');
 const mqtt = require('../../mqtt');
 const imdb = require('imdb-api');
@@ -20,24 +20,56 @@ app.dictionary = {
 app.name = "kodi";
 
 app.init = function() {
-    app.traktActivate().then(function(poll) {
-        
-    }, function(err) {
-        
-    });
+    app.traktLogin();
 }
 
 app.traktLogin = function() {
-    
+    app.readToken().then(function(token) {
+        utils.debug("Successfuly authenticated Trakt")
+    }, function(token) {
+        app.storeToken(token).then(function() {
+            app.traktLogin();
+        });
+
+    });
+}
+
+app.storeToken = function(token) {
+    return new Promise(function(resolve, reject) {
+        require('fs').writeFile(config.traktTokenFile, JSON.stringify(token), function(err) {
+            if(!err) {
+                resolve();
+            }
+        });
+    });
+}
+
+app.readToken = function() {
+    return new Promise(function(resolve, reject) {
+        require('fs').readFile(config.traktTokenFile, function(err, data) {
+            if(err) {
+                app.traktActivate().then(function(result) {
+                    reject(result);
+                });
+                return false;
+            }
+            trakt.import_token(JSON.parse(data.toString())).then(function(token) {
+                resolve(token);
+            });
+        })
+    });
 }
 
 app.traktActivate = function() {
-    trakt.get_codes().then(function(poll) {
-        utils.debug("Activate Trakt by going to " + poll.verification_url + " and enter the code " + poll.user_code);
-        return trakt.poll_access(poll);
-    }).catch(function(error) {
-        utils.debug(error.message);
+    return new Promise(function(resolve, reject) {
+        trakt.get_codes().then(function(poll) {
+            utils.debug("Activate Trakt by going to " + poll.verification_url + " and enter the code " + poll.user_code);
+            resolve(trakt.poll_access(poll));
+        }).catch(function(error) {
+            reject(error.message);
+        })
     })
+    
 }
 
 app.getOptionsForTitle = function(req) {
@@ -169,7 +201,7 @@ app.intents = [
                     res.say("Unable to find anything by the name " + options).send();
                     return;
                 }
-                var topic = config.mqttPrefix + app.name + "/" + "play";
+                var topic = config.parent.mqttPrefix + app.name + "/" + "play";
                 var message = JSON.stringify(options);
                 mqtt.connect().then(function(client) {
                     utils.debug("Topic: " + utils.cryptr.encrypt(topic));
@@ -191,7 +223,7 @@ app.intents = [
                 res.say("I didnt hear that. Did you want Popular, Trending or Featured?").send()
                 return;
             }
-            var topic = config.mqttPrefix + app.name + "/" + "popular";
+            var topic = config.parent.mqttPrefix + app.name + "/" + "popular";
             var message = JSON.stringify({
                 "action": "movies",
                 "url": req.slot("POPTYPE")
@@ -209,7 +241,7 @@ app.intents = [
         "slots": {},
         "utterances": ["{mute|silence|quiet}{ kodi| tv| movie| show|}"],
         "action": function(req, res) {
-            var topic = config.mqttPrefix + app.name + "/" + "mute";
+            var topic = config.parent.mqttPrefix + app.name + "/" + "mute";
             var message = JSON.stringify({
                 "muted": true
             });
@@ -225,7 +257,7 @@ app.intents = [
         "slots": {},
         "utterances": ["{unmute|noise|make noise|sound}{ kodi| tv| movie| show|}"],
         "action": function(req, res) {
-            var topic = config.mqttPrefix + app.name + "/" + "mute";
+            var topic = config.parent.mqttPrefix + app.name + "/" + "mute";
             var message = JSON.stringify({
                 "muted": false
             });
@@ -241,7 +273,7 @@ app.intents = [
         "slots": {},
         "utterances": ["{pause|unpause|resume}{ kodi| tv| movie| show|}"],
         "action": function(req, res) {
-            var topic = config.mqttPrefix + app.name + "/" + "resume";
+            var topic = config.parent.mqttPrefix + app.name + "/" + "resume";
             var message = JSON.stringify({
                 "resume": new Date().toDateString()
             });
@@ -257,7 +289,7 @@ app.intents = [
         "slots": {},
         "utterances": ["stop{ kodi| tv| movie| show| plackback}"],
         "action": function(req, res) {
-            var topic = config.mqttPrefix + app.name + "/" + "stop";
+            var topic = config.parent.mqttPrefix + app.name + "/" + "stop";
             var message = JSON.stringify({
                 "stop": new Date().toDateString()
             });
