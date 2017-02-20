@@ -1,10 +1,13 @@
+const http = require('http');
 const utils = require('./utils');
 const modulePath = require('path').join(__dirname, "modules");
 const config = require('./config');
 const mqtt = require('mqtt');
 var modules = {};
 require('fs').readdirSync(modulePath).forEach(function(file) {
-    modules[file] = require("./modules/" + file);
+    if(file !== "launcher") {
+        modules[file] = require("./modules/" + file);
+    }
 });
 
 var app = {};
@@ -20,9 +23,10 @@ app.init = function() {
         for(var i in modules) {
             if(modules.hasOwnProperty(i)) {
                 utils.debug(modules[i].name, 1);
-                modules[i].init().then(function() {
+                
+                modules[i].init().then(function(i) {
                     that.subscribe(modules[i].subs, client);
-                });
+                }(i));
             }
         }
     }, function(error) {
@@ -52,7 +56,7 @@ app.subscribe = function(subscriptions, client) {
     client.on("message", this.handleMessage);
 }
 
-app.handleMessage = function(topic, message) {
+app.handleMessage = function(topic, message, p) {
     message = utils.cryptr.decrypt(message);
     topic = utils.cryptr.decrypt(topic);
     utils.debug(topic + ": " + message, 2);
@@ -61,7 +65,7 @@ app.handleMessage = function(topic, message) {
 
 app.init();
 
-/*const mqtt = require('mqtt');
+/* mqtt = require('mqtt');
 const client = mqtt.connect("mqtt://broker.hivemq.com");
 const kodi = require('kodi-ws');
 const kodiModule = require('./modules/kodi');

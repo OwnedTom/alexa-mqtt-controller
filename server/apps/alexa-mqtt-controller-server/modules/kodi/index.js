@@ -205,7 +205,7 @@ app.intents = [
                 var message = JSON.stringify(options);
                 mqtt.connect().then(function(client) {
                     utils.debug("Topic: " + utils.cryptr.encrypt(topic));
-                    client.publish(utils.cryptr.encrypt(topic), utils.cryptr.encrypt(message));
+                    client.publishEncrypted(topic, message);
                     res.say("Putting on " + options.title).send();
                 });
             });
@@ -230,7 +230,7 @@ app.intents = [
             });
             
             mqtt.connect().then(function(client) {
-                client.publish(utils.cryptr.encrypt(topic), utils.cryptr.encrypt(message));
+                client.publishEncrypted(topic, message);
                 res.say("Pulling up whats " + req.slot("POPTYPE")).send();
 
             });
@@ -246,7 +246,7 @@ app.intents = [
                 "muted": true
             });
             mqtt.connect().then(function(client) {
-                client.publish(utils.cryptr.encrypt(topic), utils.cryptr.encrypt(message));
+                client.publishEncrypted(topic, message);
                 res.send();
             });
             return false;
@@ -262,7 +262,7 @@ app.intents = [
                 "muted": false
             });
             mqtt.connect().then(function(client) {
-                client.publish(utils.cryptr.encrypt(topic), utils.cryptr.encrypt(message));
+                client.publishEncrypted(topic, message);
                 res.send();
             });
             return false;
@@ -278,7 +278,7 @@ app.intents = [
                 "resume": new Date().toDateString()
             });
             mqtt.connect().then(function(client) {
-                client.publish(utils.cryptr.encrypt(topic), utils.cryptr.encrypt(message));
+                client.publishEncrypted(topic, message);
                 res.send();
             });
             return false;
@@ -294,7 +294,7 @@ app.intents = [
                 "stop": new Date().toDateString()
             });
             mqtt.connect().then(function(client) {
-                client.publish(utils.cryptr.encrypt(topic), utils.cryptr.encrypt(message));
+                client.publishEncrypted(topic, message);
                 res.send();
             });
             return false;

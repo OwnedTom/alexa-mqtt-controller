@@ -10,9 +10,13 @@
   "license": "ISC",
   "debug": true,
   "dependencies": {
+    "cryptr": "^2.0.0",
+    "finalhandler": "^0.5.1",
     "kodi-ws": "^2.4.3",
     "mqtt": "^2.3.1",
-    "cryptr": "^2.0.0",
+    "pug": "^2.0.0-beta11",
+    "router": "^1.2.0",
+    "socket.io": "^1.7.3",
     "sonos": "^0.14.1"
   }
 }
